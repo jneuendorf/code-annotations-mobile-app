@@ -1,26 +1,48 @@
 import {Navigation} from 'react-native-navigation'
 
-import WelcomeScreen from './src/screens/welcome'
+import {loadIcons} from './src/load-icons.js'
+import HelpScreen from './src/screens/help'
 import ScanQrCodeScreen from './src/screens/scan-qr-code'
-import AddAnnotationScreen from './src/screens/add-annotation'
+import PhotoScreen from './src/screens/photo'
+import ConfirmScreen from './src/screens/confirm'
+import HelpButton from './src/help-button'
+
 
 
 Navigation.registerComponent(
-    'AtomCodeAnnotations.WelcomeScreen',
-    () => WelcomeScreen
+    'AtomCodeAnnotations.HelpScreen',
+    () => HelpScreen
 )
 Navigation.registerComponent(
     'AtomCodeAnnotations.ScanQrCodeScreen',
     () => ScanQrCodeScreen
 )
 Navigation.registerComponent(
-    'AtomCodeAnnotations.AddAnnotationScreen',
-    () => AddAnnotationScreen
+    'AtomCodeAnnotations.PhotoScreen',
+    () => PhotoScreen
+)
+Navigation.registerComponent(
+    'AtomCodeAnnotations.ConfirmScreen',
+    () => ConfirmScreen
 )
 
-Navigation.startSingleScreenApp({
-    screen: {
-        title: 'Welcome',
-        screen: 'AtomCodeAnnotations.WelcomeScreen',
-    },
+Navigation.registerComponent(
+    'AtomCodeAnnotations.HelpButton',
+    () => HelpButton
+)
+
+
+loadIcons()
+.then(icons => {
+    // Needed for static methods.
+    global.icons = icons
+    Navigation.startSingleScreenApp({
+        screen: {
+            title: 'Scan QR Code',
+            screen: 'AtomCodeAnnotations.ScanQrCodeScreen',
+        },
+        passProps: {
+            icons,
+        },
+    })
 })
