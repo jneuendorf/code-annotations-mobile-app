@@ -2,7 +2,6 @@ import React from 'react'
 import {
     Linking,
     Button,
-    Image,
     ScrollView,
     StyleSheet,
     Text,
@@ -20,7 +19,7 @@ export default class WelcomeScreen extends React.PureComponent {
         return {
             'Step 1 - Scan the QR code': (
                 `The QR code can be displayed in Atom by activating the
-                'Show App QR code' command from the command palette.
+                'Show QR Code' command from the command palette.
                 The code tells this app where photo annotations must be sent.`
             ),
             'Step 2 - Take a photo': (
@@ -48,7 +47,7 @@ export default class WelcomeScreen extends React.PureComponent {
                 }
             ]}>
                 <Text style={styles.text}>
-                    This app is meant to be used in combination with the
+                    This app is meant to be used together with the
                     <Text
                         style={styles.link}
                         onPress={() =>
@@ -72,6 +71,7 @@ export default class WelcomeScreen extends React.PureComponent {
                 onPress={() => navigator.pop()}
                 title='Got it'
             />
+            <View style={styles.spacer} />
         </ScrollView>
     }
 }
@@ -91,5 +91,9 @@ const styles = StyleSheet.create({
     },
     link: {
         color: 'rgb(0,122,255)',
+    },
+    spacer: {
+        height: 10,
+        width: 10,
     },
 })

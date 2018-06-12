@@ -59,6 +59,7 @@ export default class WelcomeScreen extends React.PureComponent {
         const url = event.data
         navigator.push({
             screen: 'AtomCodeAnnotations.PhotoScreen',
+            title: 'Photo',
             passProps: {
                 url,
             },

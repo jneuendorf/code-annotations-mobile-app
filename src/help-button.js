@@ -19,9 +19,8 @@ export default class HelpButton extends React.PureComponent {
     }
 
     onPress = () => {
-        Navigation.handleDeepLink({
-            link: 'AtomCodeAnnotations.HelpScreen',
-        })
+        const {deepLinkParams} = this.props
+        Navigation.handleDeepLink(deepLinkParams)
     }
 }
 
