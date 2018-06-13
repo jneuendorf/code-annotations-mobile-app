@@ -4,10 +4,14 @@ import {
     Button,
     Dimensions,
     Image,
+    Text,
     TextInput,
+    View,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
+import Styles, {rawStyles} from '../styles'
 
 
 const {alert} = Alert
@@ -44,7 +48,7 @@ export default class ConfirmScreen extends React.PureComponent {
         const screenWidth = Dimensions.get('window').width
         const scaleFactor = width / screenWidth
         const imageHeight = height / scaleFactor
-        return <KeyboardAwareScrollView>
+        return <KeyboardAwareScrollView style={Styles.container}>
             <Image
                 source={{uri}}
                 style={{
@@ -52,22 +56,33 @@ export default class ConfirmScreen extends React.PureComponent {
                     height: imageHeight,
                 }}
             />
-            <TextInput
-                autoCapitalize='none'
-                autoCorrect={false}
-                autoFocus={true}
-                placeholder='title'
-                value={title}
-                onChangeText={this.handleChangeTitle}
-            />
-            <Button
-                onPress={this.addAnnotation}
-                title='Use this photo'
-            />
-            <Button
-                onPress={this.takeAnotherPhoto}
-                title='Take another photo'
-            />
+            <View style={[Styles.section, Styles.row]}>
+                <Text style={Styles.rowItem}>Title</Text>
+                <TextInput
+                    autoCapitalize='none'
+                    autoCorrect={false}
+                    placeholder='optional'
+                    value={title}
+                    onChangeText={this.handleChangeTitle}
+                />
+            </View>
+            <View style={[
+                Styles.sectionNoBorder,
+                Styles.row,
+                {
+                    justifyContent: 'space-evenly',
+                },
+            ]}>
+                <Button
+                    onPress={this.addAnnotation}
+                    title='Use photo'
+                />
+                <Button
+                    onPress={this.takeAnotherPhoto}
+                    title='Discard'
+                    color={rawStyles.red}
+                />
+            </View>
         </KeyboardAwareScrollView>
     }
 

@@ -1,10 +1,10 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {
+    ActivityIndicator,
     Button,
     Dimensions,
     Image,
     Slider,
-    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
@@ -13,6 +13,8 @@ import {
 import PropTypes from 'prop-types'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {RNCamera} from 'react-native-camera'
+
+import Styles from '../styles'
 
 
 const initialQuality = 0.98
@@ -39,36 +41,45 @@ export default class PhotoScreen extends React.PureComponent {
     render() {
         const {targetEditor, flashMode, desiredWidth} = this.state
         if (!targetEditor) {
-            return <View>
-                <Text>Open a text file in Atom.</Text>
-            </View>
+            return <Fragment>
+                <View style={[
+                    Styles.sectionNoBorder,
+                    Styles.centeredSpaced,
+                ]}>
+                    <Text>Open a text file in Atom.</Text>
+                </View>
+                <View style={[
+                    Styles.sectionNoBorder,
+                    Styles.centeredSpaced,
+                ]}>
+                    <ActivityIndicator size='large' />
+                </View>
+            </Fragment>
         }
+
         const screenWidth = Dimensions.get('window').width
-        return <KeyboardAwareScrollView style={styles.container}>
-            <View style={styles.section}>
+        return <KeyboardAwareScrollView style={Styles.container}>
+            <View style={Styles.section}>
                 <Text>
-                    Annotating <Text style={styles.bold}>{targetEditor}</Text>
+                    Annotating <Text style={Styles.bold}>{targetEditor}</Text>
                 </Text>
             </View>
             <RNCamera
                 ref={element => this.camera = element}
                 type={RNCamera.Constants.Type.back}
                 flashMode={RNCamera.Constants.FlashMode[flashMode]}
+                // android
                 permissionDialogTitle={'Permission to use camera'}
-                permissionDialogMessage={'We need your permission to use your camera phone'}
-                // style={styles.camera}
+                permissionDialogMessage={'The camera is used for scanning the QR code and taking photos sent to Atom.'}
                 style={{
                     height: screenWidth,
                     width: screenWidth,
                 }}
             />
             <View style={[
-                styles.section,
-                {
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                },
+                Styles.section,
+                Styles.row,
+                Styles.centeredSpaced,
             ]}>
                 {['auto', 'on', 'off'].map(mode => {
                     return <TouchableOpacity
@@ -84,26 +95,26 @@ export default class PhotoScreen extends React.PureComponent {
                                     : ''
                                 )
                             ]}
-                            style={styles.flashIcon}
+                            style={Styles.icon}
                         />
                     </TouchableOpacity>
                 })}
             </View>
-            <View style={styles.section}>
+            <View style={Styles.section}>
                 <Button
                     onPress={this.takeAndConfirmPhoto}
                     title='Take photo'
                 />
             </View>
-            <View style={styles.section}>
+            <View style={Styles.section}>
                 <Text>Quality</Text>
                 <Slider
                     value={initialQuality}
                     onSlidingComplete={this.setQuality}
                 />
             </View>
-            <View style={[styles.section, {flexDirection: 'row'}]}>
-                <Text style={{marginRight: 15}}>Width</Text>
+            <View style={[Styles.section, Styles.row]}>
+                <Text style={Styles.rowItem}>Width</Text>
                 <TextInput
                     keyboardType='numeric'
                     value={`${desiredWidth}`}
@@ -111,8 +122,11 @@ export default class PhotoScreen extends React.PureComponent {
                     maxLength={4}
                 />
             </View>
-            {/* <View style={styles.spacer} /> */}
         </KeyboardAwareScrollView>
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer)
     }
 
     fetch = async () => {
@@ -162,36 +176,3 @@ export default class PhotoScreen extends React.PureComponent {
         })
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    section: {
-        padding: 20,
-        borderBottomColor: '#bbb',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    bold: {
-        fontWeight: 'bold',
-    },
-    flashIcon: {
-        height: 25,
-        width: 25,
-    },
-    headline: {
-        fontSize: 20,
-        marginBottom: 14,
-    },
-    text: {
-        fontSize: 16,
-        textAlign: 'justify',
-    },
-    link: {
-        color: 'rgb(0,122,255)',
-    },
-    spacer: {
-        height: 10,
-        width: 10,
-    },
-})

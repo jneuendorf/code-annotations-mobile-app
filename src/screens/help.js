@@ -3,11 +3,12 @@ import {
     Linking,
     Button,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import PropTypes from 'prop-types'
+
+import Styles from '../styles'
 
 
 export default class WelcomeScreen extends React.PureComponent {
@@ -39,17 +40,11 @@ export default class WelcomeScreen extends React.PureComponent {
         const {navigator} = this.props
         const {sections} = this
         return <ScrollView>
-            <View style={[
-                styles.section,
-                {
-                    borderBottomColor: '#bbb',
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                }
-            ]}>
-                <Text style={styles.text}>
+            <View style={Styles.section}>
+                <Text style={Styles.text}>
                     This app is meant to be used together with the
                     <Text
-                        style={styles.link}
+                        style={Styles.blue}
                         onPress={() =>
                             Linking.openURL('http://atom.io/packages/code-annotations')
                         }
@@ -58,11 +53,11 @@ export default class WelcomeScreen extends React.PureComponent {
                 </Text>
             </View>
             {Object.entries(sections).map(([headline, text]) => {
-                return <View key={headline} style={styles.section}>
-                    <Text style={styles.headline}>
+                return <View key={headline} style={Styles.sectionNoBorder}>
+                    <Text style={Styles.headline}>
                         {headline}
                     </Text>
-                    <Text style={styles.text}>
+                    <Text style={Styles.text}>
                         {text.replace(/\s+/g, ' ')}
                     </Text>
                 </View>
@@ -71,29 +66,7 @@ export default class WelcomeScreen extends React.PureComponent {
                 onPress={() => navigator.pop()}
                 title='Got it'
             />
-            <View style={styles.spacer} />
+            <View style={Styles.spacer} />
         </ScrollView>
     }
 }
-
-const styles = StyleSheet.create({
-    section: {
-        flex: 1,
-        padding: 20,
-    },
-    headline: {
-        fontSize: 20,
-        marginBottom: 14,
-    },
-    text: {
-        fontSize: 16,
-        textAlign: 'justify',
-    },
-    link: {
-        color: 'rgb(0,122,255)',
-    },
-    spacer: {
-        height: 10,
-        width: 10,
-    },
-})
